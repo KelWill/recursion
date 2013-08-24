@@ -3,7 +3,21 @@
 //   return document.getElementsByClassName(className);
 // };
 
-// But in stead we're going to implement it from scratch:
+// But instead we're going to implement it from scratch:
+
 var getElementsByClassName = function (className) {
-  // your code here
+  current = arguments[1] || document.body;
+  var elements = [];
+  if (current.childNodes) {
+    return getElementsByClassName(className, current.childNodes);
+  }
+  else {
+    for (var i in current) {
+      for (var a in current[i].classList)
+      {
+        if (current[i].classList[a] == className) {return true;}
+      }
+      
+    }
+  }  
 };
