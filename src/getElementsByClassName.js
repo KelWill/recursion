@@ -5,19 +5,22 @@
 
 // But instead we're going to implement it from scratch:
 
-var getElementsByClassName = function (className) {
-  current = arguments[1] || document.body;
-  var elements = [];
+var getElementsByClassName = function (className) { 
+  current = arguments[1] || document.body; 
+  if (current == document.body) {console.log(document.body)};
+  var results = [];  
   if (current.childNodes) {
     return getElementsByClassName(className, current.childNodes);
   }
-  else {
+  else { 
     for (var i in current) {
       for (var a in current[i].classList)
       {
-        if (current[i].classList[a] == className) {return true;}
-      }
-      
+        if (current[i].classList[a] == className) {
+          results.push(current[i]);
+        } 
+      } 
     }
-  }  
+  }
+  return results;  
 };
