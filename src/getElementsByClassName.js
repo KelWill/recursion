@@ -4,23 +4,41 @@
 // };
 
 // But instead we're going to implement it from scratch:
+var count = 0;
+var results = [];
 
-var getElementsByClassName = function (className) { 
-  current = arguments[1] || document.body; 
-  if (current == document.body) {console.log(document.body)};
-  var results = [];  
-  if (current.childNodes) {
-    return getElementsByClassName(className, current.childNodes);
-  }
-  else { 
-    for (var i in current) {
-      for (var a in current[i].classList)
-      {
-        if (current[i].classList[a] == className) {
-          results.push(current[i]);
-        } 
-      } 
+//TODO make sure this just goes through once.
+
+var getElementsByClassName = function(className, node) {
+  
+  var current = node || document.body;
+  
+  if (current === document.body){
+    for (var i = 2; i < document.body.childNodes.length; i++){
+      getElementsByClassName(className, document.body.childNodes[i]);
     }
   }
-  return results;  
+  else {
+    if (current.childNodes){
+      for (var i = 0; i < current.childNodes.length; i++){
+        getElementsByClassName(className, current.childNodes[i]);
+      } 
+    }
+    results.push(current);
+  }
+  
+  if (current == document.body){
+  var answer = [];
+    for (var i = 0; i < results.length; i++){
+      if (results[i].classList){
+        for (var j = 0; j < results[i].classList.length; j++) {
+          if (results[i].classList[j] == className){
+            answer.push(results[i]);
+          }
+        }
+      }
+    }
+    results = [];
+    return answer;  
+  }
 };
