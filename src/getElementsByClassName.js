@@ -6,23 +6,18 @@
 // But instead we're going to implement it from scratch:
 
 var getElementsByClassName = function(className, current) {
-  
   current = current || document.body;
   var results = [];
-  var search = function(className, current){
-    if (current.childNodes){
-      for (var i = 0; i < current.childNodes.length; i++){
-        search(className, current.childNodes[i]);
-      } 
-    }
-    if (current.classList) {
-      for (var j = 0; j < current.classList.length; j++) {
-        if (current.classList[j] == className){
-          results.push(current);
-        }
-      }
-    } 
-  };
-  search(className, current);
-  return results; 
+  if (hasClass(current, className)){
+    results.push(current);
+  }
+  for (var i = 0; i < current.childNodes.length; i++){
+    var subArray = getElementsByClassName(className, current.childNodes[i]);
+    results = results.concat(subArray);
+  }
+  return results;
+};
+
+var hasClass = function(node, className){
+  return _.contains(node.classList, className);
 };
