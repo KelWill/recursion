@@ -3,7 +3,6 @@
 
 // but you don't so you're going to have to write it from scratch:
 var stringifyJSON = function (obj) {
-  
   if (typeof obj === 'string'){
     return '"' + obj + '"';
   } else if (Array.isArray(obj)){
@@ -11,9 +10,20 @@ var stringifyJSON = function (obj) {
       return stringifyJSON(item);
     }).join(',') + ']';
   } else if (obj && typeof obj === 'object'){
-    return '{' + _(obj).map(function(value, key){
-      return stringifyJSON(key) + ':' + stringifyJSON(value);
-    }).join(',') + '}';
+    var array = _(obj).map(function(value, key){
+      var stringKey =  stringifyJSON(key);
+      var stringValue = stringifyJSON(value);
+      //if (stringKey === undefined || stringValue)
+      if (stringValue){
+        return stringKey + ':' + stringValue;
+      }
+    });
+    if (!_.contains(array, undefined)){
+      return '{' + array.join(',') + '}';
+    }
+    return '{}';
+  } else if (typeof obj === 'function' || obj === undefined) {
+    return;
   }
   else {
     return obj + '';
